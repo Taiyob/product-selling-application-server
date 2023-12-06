@@ -6,7 +6,13 @@ require("dotenv").config();
 const port = process.env.PORT || 5000;
 
 const app = express();
-app.use(cors());
+const corsOptions = {
+  origin: 'https://brand-name-183d2.web.app',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // enable set cookie
+  optionsSuccessStatus: 204,
+};
+app.use(cors(corsOptions));
 app.use(express.json()); // Add this line to parse JSON data
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.9bycbcd.mongodb.net/?retryWrites=true&w=majority`;
@@ -21,7 +27,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    await client.connect();
+    client.connect();
 
     const userCollection = client.db("mobileBrandDB").collection("users");
     const brandCollection = client.db("mobileBrandDB").collection("brands");
@@ -111,4 +117,9 @@ app.get("/", (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
+});
+
+app.use((req, res, next) => {
+  console.log(`Received request: ${req.method} ${req.url} from ${req.headers.origin}`);
+  next();
 });
