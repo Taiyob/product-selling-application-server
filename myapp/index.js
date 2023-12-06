@@ -6,13 +6,13 @@ require("dotenv").config();
 const port = process.env.PORT || 5000;
 
 const app = express();
-const corsOptions = {
-  origin: 'https://brand-name-183d2.web.app',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // enable set cookie
-  optionsSuccessStatus: 204,
-};
-app.use(cors(corsOptions));
+// const corsOptions = {
+//   origin: 'https://brandName-183d2.web.app',
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//   credentials: true, // enable set cookie
+//   optionsSuccessStatus: 204,
+// };
+app.use(cors());
 app.use(express.json()); // Add this line to parse JSON data
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.9bycbcd.mongodb.net/?retryWrites=true&w=majority`;
@@ -66,34 +66,34 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/brand-name", async (req, res) => {
+    app.get("/brandName", async (req, res) => {
       const cursor = brandCollection.find();
       const brands = await cursor.toArray();
       console.log(brands);
       res.send(brands);
     });
 
-    app.get("/brand-name/:id", async (req, res) => {
+    app.get("/brandName/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await brandCollection.findOne(query);
       res.send(result);
     });
 
-    app.post("/brand-name", async (req, res) => {
+    app.post("/brandName", async (req, res) => {
       const brandName = req.body;
       console.log(brandName);
       const result = await brandCollection.insertOne(brandName);
       res.send(result);
     });
 
-    app.get("/add-product", async (req, res) => {
+    app.get("/addProducts", async (req, res) => {
       const cursor = productCollection.find();
       const product = await cursor.toArray();
       res.send(product);
     });
 
-    app.post("/add-product", async (req, res) => {
+    app.post("/addProducts", async (req, res) => {
       const product = req.body;
       const result = await productCollection.insertOne(product);
       res.send(result);
