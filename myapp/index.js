@@ -2,16 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
-
 const port = process.env.PORT || 5000;
 
 const app = express();
-// const corsOptions = {
-//   origin: 'https://brandName-183d2.web.app',
-//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-//   credentials: true, // enable set cookie
-//   optionsSuccessStatus: 204,
-// };
 app.use(cors());
 app.use(express.json()); // Add this line to parse JSON data
 
@@ -93,6 +86,13 @@ async function run() {
       res.send(product);
     });
 
+    app.get("/addProducts/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const result = await productCollection.findOne(filter);
+      res.send(result);
+    });
+
     app.post("/addProducts", async (req, res) => {
       const product = req.body;
       const result = await productCollection.insertOne(product);
@@ -120,6 +120,8 @@ app.listen(port, () => {
 });
 
 app.use((req, res, next) => {
-  console.log(`Received request: ${req.method} ${req.url} from ${req.headers.origin}`);
+  console.log(
+    `Received request: ${req.method} ${req.url} from ${req.headers.origin}`
+  );
   next();
 });
