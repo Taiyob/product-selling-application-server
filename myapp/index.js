@@ -6,7 +6,7 @@ const port = process.env.PORT || 5000;
 
 const app = express();
 app.use(cors());
-app.use(express.json()); // Add this line to parse JSON data
+app.use(express.json()); 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.9bycbcd.mongodb.net/?retryWrites=true&w=majority`;
 
